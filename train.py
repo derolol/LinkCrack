@@ -13,7 +13,7 @@ class Trainer(object):
     def __init__(self, args):
         super(Trainer, self).__init__()
         self.args = args
-        self.vis = Visualizer(env=args.checkname)
+        # self.vis = Visualizer(env=args.checkname)
         self.saver = Checkpointer(args.checkname, args.saver_path, overwrite=False, verbose=True, timestamp=True,
                                   max_queue=args.max_save)
 
@@ -29,7 +29,7 @@ class Trainer(object):
 
         if args.pretrained_model:
             self.model.load_state_dict(self.saver.load(self.args.pretrained_model, multi_gpu=True))
-            self.vis.log('load checkpoint: %s' % self.args.pretrained_model, 'train info')
+            # self.vis.log('load checkpoint: %s' % self.args.pretrained_model, 'train info')
 
         # Define Dataloader
         kwargs = {'num_workers': args.workers, 'pin_memory': True}
@@ -150,7 +150,7 @@ class Trainer(object):
         try:
 
             for epoch in range(1, self.args.epochs):
-                self.vis.log('Start Epoch %d ...' % epoch, 'train info')
+                # self.vis.log('Start Epoch %d ...' % epoch, 'train info')
                 self.model.train()
                 # ---------------------  training ------------------- #
                 bar = tqdm(enumerate(self.train_loader), total=len(self.train_loader))
@@ -165,49 +165,51 @@ class Trainer(object):
 
                     pred = self.train_op(data, target)
                     if idx % self.args.vis_train_loss_every == 0:
-                        self.vis.log(self.log_loss, 'train_loss')
-                        self.vis.plot_many({
-                            'train_mask_loss': self.log_loss['mask_loss'],
-                            'train_connect_loss': self.log_loss['connect_loss'],
-                            'train_total_loss': self.log_loss['total_loss']
-                        })
+                        # self.vis.log(self.log_loss, 'train_loss')
+                        # self.vis.plot_many({
+                        #     'train_mask_loss': self.log_loss['mask_loss'],
+                        #     'train_connect_loss': self.log_loss['connect_loss'],
+                        #     'train_total_loss': self.log_loss['total_loss']
+                        # })
+                        pass
 
                     if idx % self.args.vis_train_acc_every == 0:
                         self.acc_op(pred, target)
-                        self.vis.log(self.log_acc, 'train_acc')
-                        self.vis.plot_many({
-                            'train_mask_acc': self.log_acc['mask_acc'],
-                            'train_connect_acc': self.log_acc['connected_acc'],
-                            'train_mask_pos_acc': self.log_acc['mask_pos_acc'],
-                            'train_mask_neg_acc': self.log_acc['mask_neg_acc'],
-                            'train_connect_pos_acc': self.log_acc['connected_pos_acc'],
-                            'train_connect_neg_acc': self.log_acc['connected_neg_acc']
-                        })
+                        # self.vis.log(self.log_acc, 'train_acc')
+                        # self.vis.plot_many({
+                        #     'train_mask_acc': self.log_acc['mask_acc'],
+                        #     'train_connect_acc': self.log_acc['connected_acc'],
+                        #     'train_mask_pos_acc': self.log_acc['mask_pos_acc'],
+                        #     'train_mask_neg_acc': self.log_acc['mask_neg_acc'],
+                        #     'train_connect_pos_acc': self.log_acc['connected_pos_acc'],
+                        #     'train_connect_neg_acc': self.log_acc['connected_neg_acc']
+                        # })
                     if idx % self.args.vis_train_img_every == 0:
-                        self.vis.img_many({
-                            'train_img': data.cpu(),
-                            'train_pred': pred[:, 0, :, :].unsqueeze(1).contiguous().cpu(),
-                            'train_lab': target[0].unsqueeze(1).cpu(),
-                            'train_lab_channel_0': target[1][:, 0, :, :].unsqueeze(1).contiguous().cpu(),
-                            'train_lab_channel_1': target[1][:, 1, :, :].unsqueeze(1).contiguous().cpu(),
-                            'train_lab_channel_2': target[1][:, 2, :, :].unsqueeze(1).contiguous().cpu(),
-                            'train_lab_channel_3': target[1][:, 3, :, :].unsqueeze(1).contiguous().cpu(),
-                            'train_lab_channel_4': target[1][:, 4, :, :].unsqueeze(1).contiguous().cpu(),
-                            'train_lab_channel_5': target[1][:, 5, :, :].unsqueeze(1).contiguous().cpu(),
-                            'train_lab_channel_6': target[1][:, 6, :, :].unsqueeze(1).contiguous().cpu(),
-                            'train_lab_channel_7': target[1][:, 7, :, :].unsqueeze(1).contiguous().cpu(),
-                            'train_pred_channel_0': torch.sigmoid(pred[:, 1, :, :].unsqueeze(1).contiguous().cpu()),
-                            'train_pred_channel_1': torch.sigmoid(pred[:, 2, :, :].unsqueeze(1).contiguous().cpu()),
-                            'train_pred_channel_2': torch.sigmoid(pred[:, 3, :, :].unsqueeze(1).contiguous().cpu()),
-                            'train_pred_channel_3': torch.sigmoid(pred[:, 4, :, :].unsqueeze(1).contiguous().cpu()),
-                            'train_pred_channel_4': torch.sigmoid(pred[:, 5, :, :].unsqueeze(1).contiguous().cpu()),
-                            'train_pred_channel_5': torch.sigmoid(pred[:, 6, :, :].unsqueeze(1).contiguous().cpu()),
-                            'train_pred_channel_6': torch.sigmoid(pred[:, 7, :, :].unsqueeze(1).contiguous().cpu()),
-                            'train_pred_channel_7': torch.sigmoid(pred[:, 8, :, :].unsqueeze(1).contiguous().cpu()),
-                        })
+                        # self.vis.img_many({
+                        #     'train_img': data.cpu(),
+                        #     'train_pred': pred[:, 0, :, :].unsqueeze(1).contiguous().cpu(),
+                        #     'train_lab': target[0].unsqueeze(1).cpu(),
+                        #     'train_lab_channel_0': target[1][:, 0, :, :].unsqueeze(1).contiguous().cpu(),
+                        #     'train_lab_channel_1': target[1][:, 1, :, :].unsqueeze(1).contiguous().cpu(),
+                        #     'train_lab_channel_2': target[1][:, 2, :, :].unsqueeze(1).contiguous().cpu(),
+                        #     'train_lab_channel_3': target[1][:, 3, :, :].unsqueeze(1).contiguous().cpu(),
+                        #     'train_lab_channel_4': target[1][:, 4, :, :].unsqueeze(1).contiguous().cpu(),
+                        #     'train_lab_channel_5': target[1][:, 5, :, :].unsqueeze(1).contiguous().cpu(),
+                        #     'train_lab_channel_6': target[1][:, 6, :, :].unsqueeze(1).contiguous().cpu(),
+                        #     'train_lab_channel_7': target[1][:, 7, :, :].unsqueeze(1).contiguous().cpu(),
+                        #     'train_pred_channel_0': torch.sigmoid(pred[:, 1, :, :].unsqueeze(1).contiguous().cpu()),
+                        #     'train_pred_channel_1': torch.sigmoid(pred[:, 2, :, :].unsqueeze(1).contiguous().cpu()),
+                        #     'train_pred_channel_2': torch.sigmoid(pred[:, 3, :, :].unsqueeze(1).contiguous().cpu()),
+                        #     'train_pred_channel_3': torch.sigmoid(pred[:, 4, :, :].unsqueeze(1).contiguous().cpu()),
+                        #     'train_pred_channel_4': torch.sigmoid(pred[:, 5, :, :].unsqueeze(1).contiguous().cpu()),
+                        #     'train_pred_channel_5': torch.sigmoid(pred[:, 6, :, :].unsqueeze(1).contiguous().cpu()),
+                        #     'train_pred_channel_6': torch.sigmoid(pred[:, 7, :, :].unsqueeze(1).contiguous().cpu()),
+                        #     'train_pred_channel_7': torch.sigmoid(pred[:, 8, :, :].unsqueeze(1).contiguous().cpu()),
+                        # })
+                        pass
 
                     if idx % self.args.val_every == 0:
-                        self.vis.log('Start Val %d ....' % idx, 'train info')
+                        # self.vis.log('Start Val %d ....' % idx, 'train info')
                         # -------------------- val ------------------- #
                         self.model.eval()
                         val_loss = {
@@ -245,26 +247,28 @@ class Trainer(object):
                                 val_acc['mask_neg_acc'] += self.log_acc['mask_neg_acc']
                                 val_acc['connected_neg_acc'] += self.log_acc['connected_neg_acc']
                             else:
-                                self.vis.img_many({
-                                    'val_img': val_data.cpu(),
-                                    'val_pred': val_pred[:, 0, :, :].contiguous().unsqueeze(1).cpu(),
-                                    'val_lab': val_target[0].unsqueeze(1).cpu()
+                                # self.vis.img_many({
+                                #     'val_img': val_data.cpu(),
+                                #     'val_pred': val_pred[:, 0, :, :].contiguous().unsqueeze(1).cpu(),
+                                #     'val_lab': val_target[0].unsqueeze(1).cpu()
 
-                                })
-                                self.vis.plot_many({
-                                    'val_mask_loss': val_loss['mask_loss'] / idx,
-                                    'val_connect_loss': val_loss['connect_loss'] / idx,
-                                    'val_total_loss': val_loss['total_loss'] / idx,
+                                # })
+                                # self.vis.plot_many({
+                                #     'val_mask_loss': val_loss['mask_loss'] / idx,
+                                #     'val_connect_loss': val_loss['connect_loss'] / idx,
+                                #     'val_total_loss': val_loss['total_loss'] / idx,
 
-                                })
-                                self.vis.plot_many({
-                                    'val_mask_acc': val_acc['mask_acc'] / idx,
-                                    'val_connect_acc': val_acc['connected_acc'] / idx,
-                                    'val_mask_pos_acc': val_acc['mask_pos_acc'] / idx,
-                                    'val_mask_neg_acc': val_acc['mask_neg_acc'] / idx,
-                                    'val_connected_pos_acc': val_acc['connected_pos_acc'] / idx,
-                                    'val_connected_neg_acc': val_acc['connected_neg_acc'] / idx
-                                })
+                                # })
+                                # self.vis.plot_many({
+                                #     'val_mask_acc': val_acc['mask_acc'] / idx,
+                                #     'val_connect_acc': val_acc['connected_acc'] / idx,
+                                #     'val_mask_pos_acc': val_acc['mask_pos_acc'] / idx,
+                                #     'val_mask_neg_acc': val_acc['mask_neg_acc'] / idx,
+                                #     'val_connected_pos_acc': val_acc['connected_pos_acc'] / idx,
+                                #     'val_connected_neg_acc': val_acc['connected_neg_acc'] / idx
+                                # })
+                                pass
+                                
                         bar.set_description('Epoch %d --- Training --- :' % epoch)
 
                         # ----------------- save model ---------------- #
@@ -273,16 +277,16 @@ class Trainer(object):
                             self.save_acc = (val_acc['mask_acc'] / idx)
                             self.saver.save(self.model, tag='connected_weight(%f)_pos_acc(%0.5f)' % (
                                 self.loss_weight, val_acc['mask_pos_acc'] / idx))
-                            self.vis.log('Save Model -connected_weight(%f)_pos_acc(%0.5f)' % (
-                                self.loss_weight, val_acc['mask_pos_acc'] / idx), 'train info')
+                            # self.vis.log('Save Model -connected_weight(%f)_pos_acc(%0.5f)' % (
+                            #     self.loss_weight, val_acc['mask_pos_acc'] / idx), 'train info')
 
                         if epoch % 5 == 0 and epoch != 0:
                             self.save_pos_acc = (val_acc['mask_pos_acc'] / idx)
                             self.save_acc = (val_acc['mask_acc'] / idx)
                             self.saver.save(self.model, tag='connected_weight(%f)_epoch(%d)_pos_acc(%0.5f)' % (
                                 self.loss_weight, epoch, val_acc['mask_pos_acc'] / idx))
-                            self.vis.log('Save Model -connected_weight(%f)_pos_acc(%0.5f)' % (
-                                self.loss_weight, val_acc['mask_pos_acc'] / idx), 'train info')
+                            # self.vis.log('Save Model -connected_weight(%f)_pos_acc(%0.5f)' % (
+                            #     self.loss_weight, val_acc['mask_pos_acc'] / idx), 'train info')
 
                         # if idx % 1000 == 0:
                         #     self.save_pos_acc = (val_acc['mask_pos_acc'] / idx)
@@ -298,9 +302,9 @@ class Trainer(object):
 
             self.saver.save(self.model, tag='Auto_Save_Model')
             print('\n Catch KeyboardInterrupt, Auto Save final model : %s' % self.saver.show_save_pth_name)
-            self.vis.log('Catch KeyboardInterrupt, Auto Save final model : %s' % self.saver.show_save_pth_name,
-                         'train info')
-            self.vis.log('Training End!!')
+            # self.vis.log('Catch KeyboardInterrupt, Auto Save final model : %s' % self.saver.show_save_pth_name,
+            #              'train info')
+            # self.vis.log('Training End!!')
             try:
                 sys.exit(0)
             except SystemExit:
@@ -318,7 +322,7 @@ def main():
     parser.add_argument('--base-size', type=int, default=512,
                         help='base image size')
     # training hyper params
-    parser.add_argument('--epochs', type=int, default=10000, metavar='N',
+    parser.add_argument('--epochs', type=int, default=3, metavar='N',
                         help='number of epochs to train (default: auto)')
     parser.add_argument('--train-batch-size', type=int, default=8,
                         metavar='N', help='input batch size for \
@@ -341,7 +345,7 @@ def main():
     # cuda, seed and logging
     parser.add_argument('--cuda', action='store_true', default=
     True, help='Use CUDA training')
-    parser.add_argument('--gpu-ids', type=str, default='0,1',
+    parser.add_argument('--gpu-ids', type=str, default='0',
                         help='use which gpu to train, must be a \
                         comma-separated list of integers only (default=0)')
     parser.add_argument('--seed', type=int, default=1, metavar='S',
@@ -382,6 +386,7 @@ def main():
 
     args = parser.parse_args()
     args.cuda = args.cuda and torch.cuda.is_available()
+
     if args.cuda:
         try:
             args.gpu_ids = [int(s) for s in args.gpu_ids.split(',')]
